@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { CustomInput } from "../../components/CustomInput/CustomInput"
+import { useNavigate } from "react-router-dom"
 
 export const Register = () => {
 
@@ -9,6 +10,8 @@ export const Register = () => {
         password: ''
     })
 
+    const navigate = useNavigate()
+
     const inputHandler = (event) => {
         setUserData((prevState) => ({
             ...prevState,
@@ -16,9 +19,9 @@ export const Register = () => {
         }))
     }
 
-    useEffect(() => {
-            console.table(userData)
-    }, [userData])
+    useEffect (() => {
+        navigate('/')
+    }, [])
 
     return (
         <div className="miDiv">

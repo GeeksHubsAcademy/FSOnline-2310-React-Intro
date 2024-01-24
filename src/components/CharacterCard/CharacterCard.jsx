@@ -4,9 +4,11 @@ export const CharacterCard = ({id, image, name}) => {
 
 
     return (
-        <div className="cardContainer" key={id}>
-            <img src={image}></img>
-            <h3>{name}</h3>
+        <div className="character-card" key={id}>
+          <div className="card-content">
+            <img className="character-img" src={image}></img>
+            <h2 id="character-name">{name}</h2>
+          </div>
         </div>
-    )
+      );
 }

@@ -34,7 +34,7 @@ export const Home = () => {
   }, [userData]);
 
   return (
-    <div className="miDiv">
+    <div>
       <CustomInput
         type={"text"}
         name={"name"}
@@ -52,19 +52,21 @@ export const Home = () => {
       ></CustomInput>
       <h1>{userData.name}</h1>
       <div className="apiCallButton" onClick={buttonHandler}></div>
-      {characters.length > 0 ? (
-        <>
-          {characters.map((char) => {
-            return (
-              <CharacterCard
-                id={char.id}
-                image={char.image}
-                name={char.name}
-              ></CharacterCard>
-            );
-          })}
-        </>
-      ) : null}
+      <div className="characterContainer">
+        {characters.length > 0 ? (
+          <>
+            {characters.map((char) => {
+              return (
+                <CharacterCard
+                  id={char.id}
+                  image={char.image}
+                  name={char.name}
+                ></CharacterCard>
+              );
+            })}
+          </>
+        ) : null}
+      </div>
     </div>
   );
 };
