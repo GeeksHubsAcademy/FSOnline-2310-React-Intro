@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Personajes.css";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
-import { bringAllCharacters } from "../../services/apiCalls";
+import { bringAllCharacters, userLogin } from "../../services/apiCalls";
 import { CharacterCard } from "../../components/CharacterCard/CharacterCard";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"
 
 export const Personajes = () => {
   const [characters, setCharacters] = useState([]);
@@ -33,8 +34,18 @@ export const Personajes = () => {
             navigate('/characterdetail')
         }
     })
-  
   };
+
+  const loginHandler = (id) => {
+    // const token = userLogin(id)
+    // const decodedToken = jwtDecode(token)
+    // localStorage.setItem('token', token)
+    // localStorage.setItem('decoded', JSON.stringify(decodedToken))
+
+    // console.log(token, 'aquí yace TOKEN')
+    // console.log(decodedToken, 'esto es decoded token')
+    console.log(id)
+  }
 
   useEffect(() => {
     if (characters.length === 0) {
@@ -62,17 +73,22 @@ export const Personajes = () => {
         handler={inputHandler}
       ></CustomInput>
 
-      <div className="apiCallButton" onClick={buttonHandler}></div>
+      <div className="apiCallButton" onClick={buttonHandler}>Chars</div>
+      <div className="apiCallButton" onClick={loginHandler}>Login</div>
       <div className="characterContainer">
         {characters.length > 0 ? (
           <>
             {characters.map((char) => {
               return (
-                <CharacterCard
-                  id={char.id}
-                  image={char.image}
-                  name={char.name}
-                ></CharacterCard>
+                <>
+                  <CharacterCard
+                    key={char.id}
+                    image={char.image}
+                    name={char.name}
+                  >
+                  </CharacterCard>
+                  <div className="apiCallButton" onClick={() => loginHandler(char.id)}>{char}</div>
+                </>
               );
             })}
           </>

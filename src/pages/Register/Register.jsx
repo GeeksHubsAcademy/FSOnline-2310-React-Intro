@@ -20,7 +20,8 @@ export const Register = () => {
     }
 
     useEffect (() => {
-        navigate('/')
+        console.log('hemos pasado por register, pero teníamos prisa')
+        // navigate('/')
     }, [])
 
     return (
