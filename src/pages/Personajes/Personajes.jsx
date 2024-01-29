@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import "./Personajes.css";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
-import { bringAllCharacters, userLogin } from "../../services/apiCalls";
+import { bringAllCharacters, bringAllUsers, userLogin } from "../../services/apiCalls";
 import { CharacterCard } from "../../components/CharacterCard/CharacterCard";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"
 
 export const Personajes = () => {
-  const [characters, setCharacters] = useState([]);
+  const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
   const navigate = useNavigate()
@@ -24,45 +24,29 @@ export const Personajes = () => {
     }
 
   const buttonHandler = () => {
-    // if (contraseña correcta) ...
-    let personajeSeleccionado = {}
-    characters.forEach((char) => {
-        if (inputValue === char.name) {
-            personajeSeleccionado = char
-            console.log(char)
-            localStorage.setItem('details', JSON.stringify(char))
-            navigate('/characterdetail')
-        }
+    bringAllUsers()
+    .then((res) => {
+      console.log(res)
+      setUsers(res)
     })
   };
 
-  const loginHandler = (id) => {
-    // const token = userLogin(id)
-    // const decodedToken = jwtDecode(token)
-    // localStorage.setItem('token', token)
-    // localStorage.setItem('decoded', JSON.stringify(decodedToken))
-
-    // console.log(token, 'aquí yace TOKEN')
-    // console.log(decodedToken, 'esto es decoded token')
-    console.log(id)
+  const viewUserDetail = (id) => {
+    localStorage.setItem('userId', id)
+    console.log(id, "soy id en viewUserDetail")
   }
 
-  useEffect(() => {
-    if (characters.length === 0) {
-      bringAllCharacters().then((chars) => {
-        setCharacters(chars);
-      });
-    }
-  }, [characters]);
+  // useEffect(() => {
+  //   if (characters.length === 0) {
+  //     bringAllCharacters().then((chars) => {
+  //       setCharacters(chars);
+  //     });
+  //   }
+  // }, [characters]);
 
-//   useEffect(() => {
-//     characters.forEach((char) => {
-//         if (inputValue === char.name) {
-//             console.log(char)
-
-//         }
-//     })
-//   }, [inputValue])
+  useEffect (() => {
+    console.log(users)
+  }, [users])
 
 
   return (
@@ -73,22 +57,22 @@ export const Personajes = () => {
         handler={inputHandler}
       ></CustomInput>
 
-      <div className="apiCallButton" onClick={buttonHandler}>Chars</div>
-      <div className="apiCallButton" onClick={loginHandler}>Login</div>
+      <div className="apiCallButton" onClick={buttonHandler}>Users</div>
+      <div className="apiCallButton" onClick={viewUserDetail}>Login</div>
       <div className="characterContainer">
-        {characters.length > 0 ? (
+        {users.length > 0 ? (
           <>
-            {characters.map((char) => {
+            {users.map((user) => {
               return (
-                <>
+                <div onClick={() => viewUserDetail(user.id)}>
                   <CharacterCard
-                    key={char.id}
-                    image={char.image}
-                    name={char.name}
+                    key={user.id}
+                    image={user.image}
+                    name={user.username}
                   >
                   </CharacterCard>
-                  <div className="apiCallButton" onClick={() => loginHandler(char.id)}>{char}</div>
-                </>
+                  
+                </div>
               );
             })}
           </>

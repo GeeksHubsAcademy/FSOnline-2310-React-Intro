@@ -1,43 +1,39 @@
 import { useEffect, useState } from "react";
 import "./Home.css";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
-import { bringAllCharacters } from "../../services/apiCalls";
-import { CharacterCard } from "../../components/CharacterCard/CharacterCard";
+import { userLogin } from "../../services/apiCalls";
+import { jwtDecode } from "jwt-decode";
 
 export const Home = () => {
-  const [characters, setCharacters] = useState([]);
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
+  const [credentials, setCredentials] = useState({
+    username: "",
     password: "",
   });
 
   const inputHandler = (event) => {
-    setUserData((prevState) => ({
+    setCredentials((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
   };
 
   const buttonHandler = () => {
-    bringAllCharacters().then((characters) => {
-      setCharacters(characters);
-    });
+    userLogin(credentials)
+    .then((token) => {
+      console.log(token)
+      const decodedToken = jwtDecode(token)
+      console.log(decodedToken)
+      localStorage.setItem('token', token)
+      localStorage.setItem('decodedToken', decodedToken)
+    })
   };
 
-  useEffect(() => {
-    console.log(characters);
-  }, [characters]);
-
-  useEffect(() => {
-    // console.table(userData)
-  }, [userData]);
 
   return (
     <div>
       <CustomInput
         type={"text"}
-        name={"name"}
+        name={"username"}
         handler={inputHandler}
       ></CustomInput>
       <CustomInput
@@ -50,22 +46,9 @@ export const Home = () => {
         name={"password"}
         handler={inputHandler}
       ></CustomInput>
-      <h1>{userData.name}</h1>
-      <div className="apiCallButton" onClick={buttonHandler}></div>
+      <h1>{credentials.name}</h1>
+      <div className="apiCallButton" onClick={buttonHandler}>LOGIN</div>
       <div className="characterContainer">
-        {characters.length > 0 ? (
-          <>
-            {characters.map((char) => {
-              return (
-                <CharacterCard
-                  id={char.id}
-                  image={char.image}
-                  name={char.name}
-                ></CharacterCard>
-              );
-            })}
-          </>
-        ) : null}
       </div>
     </div>
   );

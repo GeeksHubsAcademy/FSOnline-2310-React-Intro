@@ -1,5 +1,16 @@
+import { useEffect } from "react"
+import { bringUserById } from "../../services/apiCalls"
+
 export const CharacterDetail = () => {
 
-    const myCharacter = JSON.parse(localStorage.getItem('details'))
-    console.log(myCharacter, 'soy details en la página de details xd')
+ 
+    const id = localStorage.getItem('userId')
+
+    useEffect(() => {
+        bringUserById(id)
+        .then((res) => {
+            console.log(res)
+        })
+    }, [])
+
 }
