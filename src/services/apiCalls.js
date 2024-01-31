@@ -2,8 +2,8 @@ import axios from "axios";
 
 // const API_URL = "https://rickandmortyapi.com/api"
 // const API_URL = "localhost:3000"
-// const API_URL = "https://clinicamia.vercel.app/"
-const API_URL = "https://dummyjson.com"
+const API_URL = "https://clinicamia.vercel.app"
+// const API_URL = "https://dummyjson.com"
 
 export const bringAllCharacters = async () => {
     const res = await axios.get(`${API_URL}/character`)
@@ -11,8 +11,17 @@ export const bringAllCharacters = async () => {
 }
 
 export const bringAllUsers = async () => {
-    const res = await axios.get(`${API_URL}/users`)
-    return res.data.users
+    const res = await axios.get(`${API_URL}/user/find`)
+    return res.data
+}
+
+export const deleteUser = async (token, id) => {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }
+    const res = await axios.delete(`${API_URL}/user/delete/${id}`, config)
 }
 
 export const bringUserById = async (id) => {
@@ -21,7 +30,7 @@ export const bringUserById = async (id) => {
 }
 
 export const userLogin = async (credentials) => {
-    const res = await axios.post(`${API_URL}/auth/login`, credentials, {})
+    const res = await axios.post(`${API_URL}/user/login`, credentials)
     return res.data.token
 }
 

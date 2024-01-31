@@ -7,16 +7,17 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const decoded = JSON.parse(localStorage.getItem("decodedToken"));
 
   const logMeOut = () => {
-    localStorage.setItem('token', '')
-    localStorage.setItem('decoded', JSON.stringify({}))
-    setTimeout(() =>{
-      navigate('/personajes')
-    },)
-  }
+    localStorage.setItem("token", "");
+    localStorage.setItem("decodedToken", JSON.stringify({}));
+    setTimeout(() => {
+      navigate("/personajes");
+    });
+  };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" id="navbar">
@@ -33,10 +34,17 @@ export const Header = () => {
                   <NavDropdown.Item href="#action/3.1">Login</NavDropdown.Item>
                   <NavDropdown.Item href="register">Resgistrarse</NavDropdown.Item>
                 </>
+              ) : decoded.role === "ADMIN" ? (
+                <>
+                  <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
+                  <NavDropdown.Item href="admin">Admin</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={() => logMeOut()}>Log out</NavDropdown.Item>
+                </>
               ) : (
                 <>
                   <NavDropdown.Item href="profile">Perfil</NavDropdown.Item>
-                  <NavDropdown.Item href="">Mis no-citas</NavDropdown.Item>
+                  <NavDropdown.Item href="">Mis citas</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={() => logMeOut()}>Log out</NavDropdown.Item>
                 </>
