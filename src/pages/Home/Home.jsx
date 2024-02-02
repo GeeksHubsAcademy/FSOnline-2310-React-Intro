@@ -17,7 +17,6 @@ export const Home = () => {
 
   // instancio redux en modo lectura
   const userRdxData = useSelector(userData)
-  console.log(userRdxData, "yo soy userRdxData")
 
   const inputHandler = (event) => {
     setCredentials((prevState) => ({
@@ -27,19 +26,15 @@ export const Home = () => {
   };
 
   const buttonHandler = () => {
-    console.log(credentials)
     userLogin(credentials)
     .then((token) => {
-      console.log(token)
       const decodedToken = jwtDecode(token)
-      console.log(decodedToken)
       
       const data = {
         token: token,
         userData: decodedToken
       }
-      console.log(data, "yo soy data, camino del almacén")
-      dispatch(login(data))
+      dispatch(login({credentials: data}))
     })
     .catch((err) => console.error("ha ocurrido un error", err))
   };

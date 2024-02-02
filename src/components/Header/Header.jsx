@@ -5,15 +5,21 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, userData } from "../../pages/userSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const decoded = JSON.parse(localStorage.getItem("decodedToken"));
+  const dispatch = useDispatch()
+  const userRdxData = useSelector(userData)
+
+  const token = userRdxData.credentials.token
+  const decoded = userRdxData.credentials.userData
+
+  console.log(userRdxData, "soy redux data en header")
 
   const logMeOut = () => {
-    localStorage.setItem("token", "");
-    localStorage.setItem("decodedToken", JSON.stringify({}));
+    dispatch(logout({credentials: {}}))
     setTimeout(() => {
       navigate("/personajes");
     });
