@@ -3,12 +3,21 @@ import "./Home.css";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
 import { userLogin } from "../../services/apiCalls";
 import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { login, userData } from "../userSlice";
 
 export const Home = () => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
+
+  // instancio redux en modo escritura
+  const dispatch = useDispatch()
+
+  // instancio redux en modo lectura
+  const userRdxData = useSelector(userData)
+  console.log(userRdxData, "yo soy userRdxData")
 
   const inputHandler = (event) => {
     setCredentials((prevState) => ({
@@ -24,12 +33,16 @@ export const Home = () => {
       console.log(token)
       const decodedToken = jwtDecode(token)
       console.log(decodedToken)
-      localStorage.setItem('token', token)
-      localStorage.setItem('decodedToken', JSON.stringify(decodedToken))
+      
+      const data = {
+        token: token,
+        userData: decodedToken
+      }
+      console.log(data, "yo soy data, camino del almacén")
+      dispatch(login(data))
     })
     .catch((err) => console.error("ha ocurrido un error", err))
   };
-
 
   return (
     <div>
