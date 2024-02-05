@@ -16,8 +16,6 @@ export const Header = () => {
   const token = userRdxData.credentials.token
   const decoded = userRdxData.credentials.userData
 
-  console.log(userRdxData, "soy redux data en header")
-
   const logMeOut = () => {
     dispatch(logout({credentials: {}}))
     setTimeout(() => {

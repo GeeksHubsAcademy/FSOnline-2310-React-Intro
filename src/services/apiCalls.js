@@ -34,12 +34,12 @@ export const userLogin = async (credentials) => {
     return res.data.token
 }
 
-export const getProfile = async (token) => {
+export const getProfile = async (token, id) => {
     const config = {
         headers: {
             Authorization: "Bearer " + token
         }
     }
-    const res = await axios.get(`${API_URL}/auth/me`, config)
+    const res = await axios.get(`${API_URL}/user/${id}`, config)
     return res.data
 }

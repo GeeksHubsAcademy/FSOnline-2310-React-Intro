@@ -3,20 +3,28 @@ import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import { getProfile } from "../../services/apiCalls";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
+import { useSelector } from "react-redux";
+import { userData } from "../userSlice";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const token = localStorage.getItem("token");
+  const userRdxData = useSelector(userData)
+
+  const token = userRdxData.credentials.token
+  const myId = userRdxData.credentials.userData.id
 
   useEffect(() => {
     if (!token) {
       navigate("/register");
     } else {
-      getProfile(token).then((res) => {
-        setProfileData(res);
-      });
+      setTimeout(() => {
+        getProfile(token, myId).then((res) => {
+          console.log(res, "soy la respuesta del server")
+          setProfileData(res);
+      })
+      }, 2000);
     }
   }, []);
 
@@ -26,6 +34,10 @@ export const Profile = () => {
       [event.target.name]: event.target.value,
     }));
   };
+
+  useEffect (()=> {
+    console.log(profileData)
+  }, [profileData])
 
   const buttonHandler = () => {
     setIsEditing(!isEditing);
@@ -44,18 +56,29 @@ export const Profile = () => {
 
   return (
     <div className="profileDesign">
-      <h1>{profileData.firstName}</h1>
+      
+
+      { !!profileData.email 
+      ?
+      <>
+        <h1>{profileData.createdAt}</h1>
+        <h1>{profileData.email}</h1>
+        <h1>{profileData.role}</h1>
+        <h1>{profileData._id}</h1>
+      </> 
+      : <p>Cargando datos de perfil...</p>
+      }
       <button onClick={() => buttonHandler()}></button>
       {isEditing 
       ? (
         <CustomInput
-          name="firstName"
+          name="firstName"  
           type="text"
           handler={inputHandler}
         ></CustomInput>
       ) : null}
-      <h1>{profileData.eyeColor}</h1>
-      <img src={profileData.image}></img>
     </div>
   );
 };
+
+
