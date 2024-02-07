@@ -11,6 +11,7 @@ export const bringAllCharacters = async () => {
 }
 
 export const bringAllUsers = async () => {
+    
     const res = await axios.get(`${API_URL}/user/find`)
     return res.data
 }
@@ -34,7 +35,7 @@ export const userLogin = async (credentials) => {
     return res.data.token
 }
 
-export const getProfile = async (token, id) => {
+export const getUserById = async (token, id) => {
     const config = {
         headers: {
             Authorization: "Bearer " + token

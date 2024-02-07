@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { getProfile } from "../../services/apiCalls";
+import { getUserById } from "../../services/apiCalls";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
 import { useSelector } from "react-redux";
 import { userData } from "../userSlice";
@@ -20,7 +20,7 @@ export const Profile = () => {
       navigate("/register");
     } else {
       setTimeout(() => {
-        getProfile(token, myId).then((res) => {
+        getUserById(token, myId).then((res) => {
           console.log(res, "soy la respuesta del server")
           setProfileData(res);
       })
@@ -80,5 +80,3 @@ export const Profile = () => {
     </div>
   );
 };
-
-
