@@ -19,8 +19,9 @@ export const Profile = () => {
     if (!token) {
       navigate("/register");
     } else {
-      setTimeout(() => {
-        getUserById(token, myId).then((res) => {
+      setTimeout(() => {     // setTimeout para hacer más amable el acceso a los datos de perfil
+        getUserById(token, myId)
+        .then((res) => {
           console.log(res, "soy la respuesta del server")
           setProfileData(res);
       })

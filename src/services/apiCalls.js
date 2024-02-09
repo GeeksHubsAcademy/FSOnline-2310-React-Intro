@@ -31,6 +31,7 @@ export const bringUserById = async (id) => {
 }
 
 export const userLogin = async (credentials) => {
+    console.log(credentials)
     const res = await axios.post(`${API_URL}/user/login`, credentials)
     return res.data.token
 }
@@ -44,3 +45,16 @@ export const getUserById = async (token, id) => {
     const res = await axios.get(`${API_URL}/user/${id}`, config)
     return res.data
 }
+
+
+
+/* 
+
+
+typeError: cannot read properties of undefined (reading token, role)
+
+id === undefined NO 
+algo.id ---> algo === undefined <---
+
+
+*/
