@@ -111,7 +111,7 @@ export const Admin = () => {
           <>
             {users.map((user) => {
               return (
-                <div className="userRow">
+                <div className="userRow" key={user._id}>
                   <A
                     name={user.name}
                     key={user._id}
@@ -127,10 +127,10 @@ export const Admin = () => {
         ) : (
           <img src="../../../public/loading.gif"></img>
         )}
-        <select class="form-select" onChange={(e) => roleFilterHandler(e)}>
-          <option selected>Selecciona un rol</option>
-          {roles.map((rol) => {
-            return (<option value={rol}>{rol}</option>)
+        <select className="form-select" onChange={(e) => roleFilterHandler(e)}>
+          <option>Selecciona un rol</option>
+          {roles.map((rol, i) => {
+            return (<option value={rol} key={i}>{rol}</option>)
           })
           }
         </select>

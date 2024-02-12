@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// const API_URL = "https://rickandmortyapi.com/api"
-// const API_URL = "localhost:3000"
-const API_URL = "https://clinicamia.vercel.app"
+const API_URL = "https://rickandmortyapi.com/api"
+// const API_URL = "127.0.0.1:27017"
+// const API_URL = "https://clinicamia.vercel.app"
 // const API_URL = "https://dummyjson.com"
 
 export const bringAllCharacters = async () => {
@@ -10,10 +10,14 @@ export const bringAllCharacters = async () => {
     return res.data.user
 }
 
-export const bringAllUsers = async () => {
-    
-    const res = await axios.get(`${API_URL}/user/find`)
+export const bringAllUsers = async (url) => {
+    if (url) {
+        const res = await axios.get(url)
+        return res.data
+    } else {
+    const res = await axios.get(`${API_URL}/character`)
     return res.data
+    }
 }
 
 export const deleteUser = async (token, id) => {
