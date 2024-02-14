@@ -32,7 +32,6 @@ export const Home = () => {
   };
 
   const buttonHandler = () => {
-    console.log(credentials)
     userLogin(credentials)
       .then((token) => {
         const decodedToken = jwtDecode(token);

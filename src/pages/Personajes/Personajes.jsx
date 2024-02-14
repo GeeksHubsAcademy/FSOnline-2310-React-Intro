@@ -33,7 +33,7 @@ export const Personajes = () => {
   };
 
   const buttonHandler = () => {
-    bringAllUsers().then((res) => {
+    bringAllCharacters().then((res) => {
       console.log(res);
       setUsers(res.results);
       setPages((prevState) => ({
@@ -46,7 +46,7 @@ export const Personajes = () => {
 
   const pageHandler = (event) => {
     const page = event.target.id
-    bringAllUsers(page)
+    bringAllCharacters(page)
     .then((res) => {
             setUsers(res.results);
       setPages((prevState) => ({

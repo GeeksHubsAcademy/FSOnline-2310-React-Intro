@@ -1,7 +1,12 @@
 import "./Admin.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { bringAllUsers, getUserById } from "../../services/apiCalls";
+import {
+  bringAllUsers,
+  bringFilteredUsers,
+  bringUsersByRole,
+  getUserById,
+} from "../../services/apiCalls";
 import { A } from "../../components/Accordion/Accordion.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { userData } from "../userSlice.js";
@@ -14,6 +19,7 @@ export const Admin = () => {
   const [finder, setFinder] = useState("");
   const [usuariosEncontrados, setUsuariosEncontrados] = useState([]);
   const [selectedUser, setSelectedUser] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,8 +27,7 @@ export const Admin = () => {
 
   const token = userRdxData.credentials.token;
   const decoded = userRdxData.credentials.userData;
-  const roles = ["USER", "DOCTOR", "ADMIN", "ROL FALSO PAL SELECT"]
-
+  const roles = ["USER", "DOCTOR", "ADMIN", "ROL FALSO PAL SELECT"];
 
   const deleteUserButtonHandler = (e) => {
     getUserById(token, e.target.id).then((res) => {
@@ -37,8 +42,44 @@ export const Admin = () => {
   };
 
   const roleFilterHandler = (e) => {
-    console.log(e.target.value)
+    const role = e.target.value;
+    bringUsersByRole(role).then((res) => {
+      setUsuariosEncontrados(res)
+      console.log(res, 'soy res de bringUsersByRole');
+    });
+  };
+
+  const megafiltrado = (e) => {
+    const role = e.target.value;
+    username = finder
+    bringFilteredUsers(role, username)
+    .then((res) => {
+      console.log(res)
+      setUsuariosEncontrados(res)
+    })
+    .catch((err) => { console.log(err, ' el megafiltro nos ha fallado por última vez')})
   }
+
+  const bringPaginatedUsers = (arg) => {
+    bringAllUsers(page).then((res) => {
+      setUsers(res);
+      setCurrentPage();
+    });
+  };
+
+  useEffect(() => {
+    console.log(currentPage, " Página actual");
+    if (currentPage < 1) {
+      setCurrentPage(1);
+    }
+    bringAllUsers(currentPage)
+      .then((res) => {
+        setUsers(res);
+      })
+      .catch((err) => {
+        console.error(console.log(res, "mi paginasion ta malita"), err);
+      });
+  }, [currentPage]);
 
   useEffect(() => {
     if (decoded.role !== "ADMIN") {
@@ -46,7 +87,7 @@ export const Admin = () => {
     } else {
       setTimeout(() => {
         bringAllUsers().then((res) => {
-          console.log(res)
+          console.log(res);
           setUsers(res);
         });
       }, 1000);
@@ -81,20 +122,20 @@ export const Admin = () => {
     <div className="adminDesign">
       <div className="userList">
         <div className="filterDesign">
-          <button>Prev</button>
+          <button onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
           <CustomInput
             placeholder={"buscar usuario"}
             type={"text"}
             name={"userFinder"}
             handler={inputHandler}
           ></CustomInput>
-          <button>Next</button>
+          <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
         </div>
         {usuariosEncontrados.length > 0 ? (
           <>
             {usuariosEncontrados.map((user) => {
               return (
-                <div className="userRow">
+                <div className="userRow" key={user._id}>
                   <A
                     name={user.name}
                     key={user._id}
@@ -130,9 +171,12 @@ export const Admin = () => {
         <select className="form-select" onChange={(e) => roleFilterHandler(e)}>
           <option>Selecciona un rol</option>
           {roles.map((rol, i) => {
-            return (<option value={rol} key={i}>{rol}</option>)
-          })
-          }
+            return (
+              <option value={rol} key={i}>
+                {rol}
+              </option>
+            );
+          })}
         </select>
       </div>
       <div className="userDetail">

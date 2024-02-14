@@ -1,16 +1,29 @@
 import axios from "axios";
 
-const API_URL = "https://rickandmortyapi.com/api"
-// const API_URL = "127.0.0.1:27017"
+axios.defaults.baseURL = ""
+// const API_URL = "https://rickandmortyapi.com/api"
+const API_URL = "127.0.0.1:27017"
 // const API_URL = "https://clinicamia.vercel.app"
 // const API_URL = "https://dummyjson.com"
 
-export const bringAllCharacters = async () => {
-    const res = await axios.get(`${API_URL}/character`)
-    return res.data.user
+export const bringFilteredUsers = async (name, role) => {
+
+    const res = await axios.get(`http://localhost:27017/user/megafiltro?name=${name}&role=${role}`)
+    return res.data
 }
 
-export const bringAllUsers = async (url) => {
+export const bringAllUsers = async (page=1) => {
+    const res = await axios.get(`http://localhost:27017/user/find?page=${page}`)
+    console.log(res)
+    return res.data
+}
+
+export const bringUsersByRole = async (role) => {
+    const res = await axios.get(`http://localhost:27017/user?role=${role}`)
+    return res.data
+}
+
+export const bringAllCharacters = async (url) => {
     if (url) {
         const res = await axios.get(url)
         return res.data
@@ -36,7 +49,7 @@ export const bringUserById = async (id) => {
 
 export const userLogin = async (credentials) => {
     console.log(credentials)
-    const res = await axios.post(`${API_URL}/user/login`, credentials)
+    const res = await axios.post(`http://localhost:27017/user/login`, credentials)
     return res.data.token
 }
 
