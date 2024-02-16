@@ -49,10 +49,11 @@ export const Admin = () => {
     });
   };
 
-  const megafiltrado = (e) => {
+  const megafiltradoHandler = (e) => {
     const role = e.target.value;
-    username = finder
-    bringFilteredUsers(role, username)
+    const username = finder
+    console.log(username, role, "estos son los datos en la vista ADMIN")
+    bringFilteredUsers(username, role)
     .then((res) => {
       console.log(res)
       setUsuariosEncontrados(res)
@@ -94,25 +95,25 @@ export const Admin = () => {
     }
   }, []);
 
-  //input con debounce
-  useEffect(() => {
-    // si estamos tecleando en el buscador
-    if (finder !== "") {
-      // creamos un temporizador que filtrará los usuarios
-      // (normalmente esto sería una llamada a BBDD) y los setea
-      const filterUsers = setTimeout(() => {
-        const found = users.filter((user) => user.name.includes(finder));
-        setUsuariosEncontrados(found);
-      }, 1000);
-      // preparamos un return con una función que borra el temporizador anterior.
-      // como está en el return de un useEffect, se ejecutará la próxima vez
-      // que se ejecute el useEffect
-      return () => clearTimeout(filterUsers);
-      // si no estamos buscando nada, se traen todos los usuarios con normalidad
-    } else {
-      setUsuariosEncontrados([]);
-    }
-  }, [finder]);
+  // //input con debounce
+  // useEffect(() => {
+  //   // si estamos tecleando en el buscador
+  //   if (finder !== "") {
+  //     // creamos un temporizador que filtrará los usuarios
+  //     // (normalmente esto sería una llamada a BBDD) y los setea
+  //     const filterUsers = setTimeout(() => {
+  //       const found = users.filter((user) => user.name.includes(finder));
+  //       setUsuariosEncontrados(found);
+  //     }, 1000);
+  //     // preparamos un return con una función que borra el temporizador anterior.
+  //     // como está en el return de un useEffect, se ejecutará la próxima vez
+  //     // que se ejecute el useEffect
+  //     return () => clearTimeout(filterUsers);
+  //     // si no estamos buscando nada, se traen todos los usuarios con normalidad
+  //   } else {
+  //     setUsuariosEncontrados([]);
+  //   }
+  // }, [finder]);
 
   useEffect(() => {
     console.log(users);
@@ -168,7 +169,7 @@ export const Admin = () => {
         ) : (
           <img src="../../../public/loading.gif"></img>
         )}
-        <select className="form-select" onChange={(e) => roleFilterHandler(e)}>
+        <select className="form-select" onChange={(e) => megafiltradoHandler(e)}>
           <option>Selecciona un rol</option>
           {roles.map((rol, i) => {
             return (

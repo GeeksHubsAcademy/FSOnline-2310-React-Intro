@@ -7,8 +7,8 @@ const API_URL = "127.0.0.1:27017"
 // const API_URL = "https://dummyjson.com"
 
 export const bringFilteredUsers = async (name, role) => {
-
     const res = await axios.get(`http://localhost:27017/user/megafiltro?name=${name}&role=${role}`)
+    console.log(res, 'soy res en apicalls')
     return res.data
 }
 
